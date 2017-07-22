@@ -1,0 +1,67 @@
+@import "partials/fonts";
+@import "partials/typography";
+@import "partials/weather";
+@import "partials/anime";
+@import "partials/status";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: #EEE;
+}
+
+#aincrad {
+  display: block;
+  align-items: stretch;
+  width: 240px;
+  margin-right: 24px;
+  background: url("img/header.png") 50%;
+  background-size: cover;
+  border-right: 1px solid #DDD;
+}
+
+.navbar {
+  background: #212121;
+  color: #EEE;
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.content-main {
+  margin-right: 24px;
+  width: calc(100% - 264px);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 24px 24px;
+
+}
+
+.block {
+  background: #F4F9FF;
+  padding: 24px;
+  margin-bottom: 24px;
+
+  h2 {
+    padding-bottom: 6px;
+    border-bottom: 3px solid #9A9FA3;
+
+  }
+
+}

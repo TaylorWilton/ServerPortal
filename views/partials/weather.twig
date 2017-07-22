@@ -1,0 +1,13 @@
+<div class="block" id="weather">
+  <h2>Weather in ${ forecast.location }</h2>
+  <p class="weather-brief">
+    <img class="weather-icon"
+         :src="'./assets/img/' + forecast.summaryNow.icon + '.svg'"
+         :alt="forecast.summaryNow.icon"
+    >
+    <span class="temp">${ forecast.summaryNow.temperature }°</span>
+
+  </p>
+  <p class="lead">${ forecast.summaryToday.description }</p>
+
+</div>

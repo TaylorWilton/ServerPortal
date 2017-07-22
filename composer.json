@@ -1,0 +1,20 @@
+{
+  "name": "taylor/server-monitor",
+  "authors": [
+    {
+      "name": "tdeakin",
+      "email": "amles.gamer@gmail.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "~6.0",
+    "twig/twig": "2.0",
+    "symfony/yaml": "^3.3",
+    "klein/klein": "^2.1"
+  },
+  "autoload": {
+    "psr-0": {
+      "": "src/"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+<div class="block" id="anime">
+  <h2>Currently Airing Shows</h2>
+  <div class="row" v-if="!loading">
+      <div v-for="day in airingAnime" class="day">
+        <h3>${ day.dayName }</h3>
+        <ul class="img-list">
+            <li v-for="anime in day.shows" class="show">
+              <div class="show-content">
+                <h3>${ anime.series_title }</h3>
+              </div>
+              <img :src="anime.series_image"
+                   :alt="anime.series_title">
+            </li>
+        </ul>
+      </div>
+  </div>
+</div>

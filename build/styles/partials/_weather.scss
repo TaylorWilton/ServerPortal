@@ -1,0 +1,13 @@
+.weather-brief{
+  display: flex;
+  align-items: center;
+
+  img{
+    margin-right: 12px;
+    width: 64px;
+  }
+
+  .temp{
+    font-size: 3rem;
+  }
+}

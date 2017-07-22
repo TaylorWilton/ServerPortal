@@ -1,0 +1,33 @@
+.img-list {
+  display: flex;
+  list-style-type: none;
+}
+
+.show {
+  position: relative;
+
+  img {
+    height: 260px;
+  }
+
+  .show-content {
+    background: linear-gradient(transparent,black);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: #EEE;
+    padding: 12px;
+    height: 260px;
+    display: flex;
+    align-items: flex-end;
+
+    h3{
+      font-size: 1.4rem;
+    }
+  }
+}
+.day{
+  margin-right: 24px;
+}
