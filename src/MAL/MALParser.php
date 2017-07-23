@@ -79,7 +79,6 @@ class MALParser
 
             return $now < $endDate;
 
-
         }, ARRAY_FILTER_USE_BOTH);
 
         $airing = array_map(function ($element) {

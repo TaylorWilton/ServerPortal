@@ -3,7 +3,6 @@
 class RSSParser
 {
 
-    private $json;
     private $feedURL;
     private $feedTitle;
     private $data;

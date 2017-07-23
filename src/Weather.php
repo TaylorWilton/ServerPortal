@@ -1,6 +1,6 @@
 <?php
 
-class Weather
+class Weather implements iCacheable
 {
 
     private $weatherForecast;
@@ -11,30 +11,56 @@ class Weather
     {
         $this->location = $location;
 
-        $cached = json_decode(file_get_contents("./data/weather.json"), true);
-        $dateSaved = new DateTime($cached['cachedAt']['date']);
-        $now = new DateTime();
-        $diff = $now->diff($dateSaved);
+        $cached = $this->loadCache();
 
-        if ($diff->days > 0 || $diff->m > 30) {
+        if (empty($cached) || $this->isStale($cached)) {
             $this->weatherForecast = $this->getWeatherData($apiKey, $lat, $lon);
             $this->parsedData = $this->parseWeatherData();
             $this->cache();
+        } else {
+            $this->parsedData = $cached;
         }
 
-        $this->parsedData = $cached;
     }
 
-    public function getForecast(): array
+    function loadCache(): array
     {
-        return $this->parsedData;
+        $result = file_get_contents("./data/weather.json");
+        if (!$result) {
+            return [];
+        }
+
+        return json_decode($result, true);
     }
 
-
-    private function cache(): void
+    function isStale(array $cache): bool
     {
-        $this->parsedData["cachedAt"] = new DateTime();
-        file_put_contents("./data/weather.json", json_encode($this->parsedData));
+        $dateSaved = new DateTime($cache['cachedAt']['date']);
+        $now = new DateTime();
+        $diff = $now->diff($dateSaved);
+
+        return ($diff->days > 0 || $diff->m > 30);
+    }
+
+    /**
+     * @param string $apiKey
+     * @param string $lat
+     * @param string $lon
+     * @return array
+     */
+    private function getWeatherData(
+        string $apiKey,
+        string $lat,
+        string $lon
+    ): array {
+        $url = sprintf("https://api.darksky.net/forecast/%s/%s,%s?units=auto",
+            $apiKey, $lat, $lon);
+        $json = json_decode(file_get_contents($url), true);
+
+        return [
+            "current" => $json['currently'],
+            "forecast" => $json['daily']
+        ];
     }
 
     private function parseWeatherData(): array
@@ -84,24 +110,16 @@ class Weather
         ];
     }
 
-    /**
-     * @param string $apiKey
-     * @param string $lat
-     * @param string $lon
-     * @return array
-     */
-    private function getWeatherData(string $apiKey, string $lat, string $lon): array
+    function cache()
     {
-        $url = sprintf("https://api.darksky.net/forecast/%s/%s,%s?units=auto",
-            $apiKey, $lat, $lon);
-        $json = json_decode(file_get_contents($url), true);
-
-        return [
-            "current" => $json['currently'],
-            "forecast" => $json['daily']
-        ];
+        $this->parsedData["cachedAt"] = new DateTime();
+        file_put_contents("./data/weather.json", json_encode($this->parsedData));
     }
 
+    public function getForecast(): array
+    {
+        return $this->parsedData;
+    }
 }
 
 

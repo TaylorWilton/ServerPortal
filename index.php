@@ -1,7 +1,6 @@
 <?php
 require 'vendor/autoload.php';
 
-
 use MAL\MAL;
 use MAL\MALParser;
 

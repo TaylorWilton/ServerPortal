@@ -1,6 +1,7 @@
 <?php
 
 namespace MAL;
+
 class MALDataLocal extends MALData implements iMALData
 {
 

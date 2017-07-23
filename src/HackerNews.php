@@ -3,20 +3,17 @@
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise;
 
-class HackerNews
+class HackerNews implements iCacheable
 {
 
     private $topPosts;
 
     public function __construct(int $numberOfPosts = 10)
     {
-        $cached = json_decode(file_get_contents("./data/hackernews.json"), true);
-        $dateSaved = new DateTime($cached['cachedAt']['date']);
-        $now = new DateTime();
-        $diff = $now->diff($dateSaved);
 
-        // if stale, get from HN then cache
-        if ($diff->days > 0 || $diff->h > 1) {
+        $cached = $this->loadCache();
+
+        if (empty($cached) || $this->isStale($cached)) {
             $this->topPosts = $this->GetTopHNPosts($numberOfPosts);
             $this->cache();
         } else {
@@ -24,14 +21,29 @@ class HackerNews
         }
     }
 
-    public function getTopPosts(): array
+    function loadCache(): array
     {
-        return $this->topPosts;
+        $result = file_get_contents("./data/hackernews.json");
+        if (!$result) {
+            return [];
+        }
+
+        return json_decode($result, true);
+
     }
 
-
-    private function GetTopHNPosts(int $numberOfPosts): array
+    function isStale(array $cache): bool
     {
+        $dateSaved = new DateTime($cache['cachedAt']['date']);
+        $now = new DateTime();
+        $diff = $now->diff($dateSaved);
+
+        return ($diff->days > 0 || $diff->h > 1);
+    }
+
+    private function GetTopHNPosts(
+        int $numberOfPosts
+    ): array {
         $client = new Client(['base_uri' => 'https://hacker-news.firebaseio.com/v0/', 'verify' => false]);
 
         $topTenHNIds = array_slice(json_decode($client->get("topstories.json")->getBody(),
@@ -50,9 +62,14 @@ class HackerNews
         return $topTenHNPosts;
     }
 
-    private function cache(): void
+    function cache()
     {
         $this->topPosts["cachedAt"] = new DateTime();
         file_put_contents("./data/hackernews.json", json_encode($this->topPosts));
+    }
+
+    public function getTopPosts(): array
+    {
+        return $this->topPosts;
     }
 }

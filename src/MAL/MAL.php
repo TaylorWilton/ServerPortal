@@ -12,7 +12,6 @@ class MAL
     private $debug = false;
     private $MALDataSource;
 
-
     function __construct(string $username)
     {
         $this->username = $username;
@@ -32,6 +31,12 @@ class MAL
 
     }
 
+    private function cache()
+    {
+        $this->data["cachedAt"] = new DateTime();
+        file_put_contents("./data/{$this->username}_mal.json", json_encode($this->data));
+    }
+
     /**
      * @return iMALData
      */
@@ -44,13 +49,5 @@ class MAL
     {
         return json_encode($this->data, true);
     }
-
-
-    private function cache(): void
-    {
-        $this->data["cachedAt"] = new DateTime();
-        file_put_contents("./data/{$this->username}_mal.json", json_encode($this->data));
-    }
-
 
 }

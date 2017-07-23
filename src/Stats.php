@@ -1,11 +1,9 @@
 <?php
 
-
-class Stats
+class Stats implements iCacheable
 {
 
     public $disks;
-    public $uptime;
     private $stats;
 
     public function __construct()
@@ -14,13 +12,9 @@ class Stats
         if (substr(PHP_OS, 0, 3) == 'WIN') {
             $this->mock();
         } else {
-            $cached = json_decode(file_get_contents("./data/stats.json"), true);
-            $dateSaved = new DateTime($cached['cachedAt']['date']);
-            $now = new DateTime();
-            $diff = $now->diff($dateSaved);
+            $cached = $this->loadCache();
 
-            // if stale, get from shell then cache
-            if ($diff->days > 0 || $diff->h > 1) {
+            if (empty($cached) || $this->isStale($cached)) {
                 $disksToFind = ["/home/kirito/.Private", "/dev/sdb1"];
                 $this->disks = $this->parseDisks($disksToFind);
                 $this->stats = $this->generateStats();
@@ -29,47 +23,10 @@ class Stats
                 $this->stats = $cached['stats'];
                 $this->disks = $cached['disks'];
             }
-
         }
-
     }
 
-    /**
-     * @return array
-     */
-    private function generateStats(): array
-    {
-        exec("uptime", $result);
-        $data = explode(' ', $result[0]);
-
-        $data[4] = str_replace(",", "", $data[4]);
-
-        $uptime = "{$data[3]}  {$data[4]}";
-
-        exec('speedtest-cli', $speeds);
-
-        return [
-            [
-                "name" => "Uptime",
-                "value" => $uptime
-            ],
-            [
-                "name" => "Download Speed",
-                "value" => explode(': ', $speeds[6])[1]
-            ],
-            [
-                "name" => "Upload Speed",
-                "value" => explode(': ', $speeds[8])[1]
-            ]
-        ];
-    }
-
-    public function getStats(): array
-    {
-        return $this->stats;
-    }
-
-    private function mock(): array
+    private function mock()
     {
         $this->disks = [
             0 => [
@@ -102,6 +59,26 @@ class Stats
         ];
     }
 
+    function loadCache(): array
+    {
+        $result = file_get_contents("./data/stats.json");
+        if (!$result) {
+            return [];
+        }
+
+        return json_decode($result, true);
+    }
+
+    function isStale(array $cache): bool
+    {
+        $dateSaved = new DateTime($cache['cachedAt']['date']);
+        $now = new DateTime();
+        $diff = $now->diff($dateSaved);
+
+        // 15 minutes old, or over a day
+        return ($diff->days > 0 || $diff->m > 15);
+    }
+
     private function parseDisks(array $find): array
     {
         $result = [];
@@ -130,7 +107,38 @@ class Stats
         return $result;
     }
 
-    private function cache(): void
+    /**
+     *
+     * @return array
+     */
+    private function generateStats(): array
+    {
+        exec("uptime", $result);
+        $data = explode(' ', $result[0]);
+
+        $data[4] = str_replace(",", "", $data[4]);
+
+        $uptime = "{$data[3]}  {$data[4]}";
+
+        exec('speedtest-cli', $speeds);
+
+        return [
+            [
+                "name" => "Uptime",
+                "value" => $uptime
+            ],
+            [
+                "name" => "Download Speed",
+                "value" => explode(': ', $speeds[6])[1]
+            ],
+            [
+                "name" => "Upload Speed",
+                "value" => explode(': ', $speeds[8])[1]
+            ]
+        ];
+    }
+
+    function cache()
     {
         $data = [
             "disks" => $this->disks,
@@ -139,5 +147,10 @@ class Stats
         ];
         file_put_contents("./data/stats.json", json_encode($data));
 
+    }
+
+    public function getStats(): array
+    {
+        return $this->stats;
     }
 }
