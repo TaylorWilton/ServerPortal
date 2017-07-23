@@ -3,7 +3,7 @@
     <h2>Loading RSS Feeds</h2>
     <div class="loader"></div>
   </div>
-  <div class="grid">
+  <div class="grid-inner">
     <div class="block" v-for="feed in feeds">
       <h2 v-if="!loading">${ feed.title }</h2>
       <div class="loader" v-if="loading"></div>

@@ -14,5 +14,12 @@ MALUsername: <string|username>
 feeds:
   - title: <string|title>,
     link: <string|url>
+  # ...
+
+# disks - NOTE: THIS IS AN UBUNTU-ONLY FEATURE AT THE MOMENT
+disks:
+  - <string|disk-location>
+  # ...
+
 
 Debug: <bool|b>

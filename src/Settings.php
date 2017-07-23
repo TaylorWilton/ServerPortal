@@ -13,6 +13,7 @@ class Settings
     public $MALUsername;
     public $debug;
     public $feeds;
+    public $disks;
 
     public function __construct(string $filename = "config.yml")
     {
@@ -31,5 +32,6 @@ class Settings
         $this->debug = $config['Debug'];
         $this->MALUsername = $config['MALUsername'];
         $this->feeds = $config['feeds'];
+        $this->disks = $config['disks'];
     }
 }

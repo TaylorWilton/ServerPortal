@@ -9,6 +9,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: all 1s linear;
 }
 
 body {
@@ -48,16 +49,21 @@ body {
 
 .grid {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 70% 30%;
   grid-gap: 24px 24px;
 
+}
+
+.grid-inner {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 24px 24px;
 }
 
 .block {
   background: #F4F9FF;
   padding: 24px;
   margin-bottom: 24px;
-  transition: max-height .5s;
 
   h2 {
     padding-bottom: 6px;

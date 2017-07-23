@@ -23,10 +23,11 @@ $klein->respond(function (
     });
 });
 
-$klein->respond('/getStats', function (\Klein\Request $request, \Klein\Response $response) {
-    $stats = new Stats();
-    $response->json(["stats" => $stats->getStats(), "disks" => $stats->disks,]);
-});
+$klein->respond('/getStats',
+    function (\Klein\Request $request, \Klein\Response $response, \Klein\ServiceProvider $services, \Klein\App $app) {
+        $stats = new Stats($app->settings->disks);
+        $response->json(["stats" => $stats->getStats(), "disks" => $stats->disks,]);
+    });
 
 $klein->respond('/getData',
     function (\Klein\Request $request, \Klein\Response $response, \Klein\ServiceProvider $service, \Klein\App $app) {

@@ -6,7 +6,7 @@ class Stats implements iCacheable
     public $disks;
     private $stats;
 
-    public function __construct()
+    public function __construct(array $disksToFind)
     {
         // mock for Windows
         if (substr(PHP_OS, 0, 3) == 'WIN') {
@@ -15,7 +15,6 @@ class Stats implements iCacheable
             $cached = $this->loadCache();
 
             if (empty($cached) || $this->isStale($cached)) {
-                $disksToFind = ["/home/kirito/.Private", "/dev/sdb1"];
                 $this->disks = $this->parseDisks($disksToFind);
                 $this->stats = $this->generateStats();
                 $this->cache();
@@ -97,7 +96,7 @@ class Stats implements iCacheable
 
         $result = array_map(function ($element) {
             return [
-                "name" => $element[0],
+                "name" => $element[5],
                 "value" => substr($element[2], 0, -1),
                 "max" => substr($element[1], 0, -1),
                 "min" => 0,
