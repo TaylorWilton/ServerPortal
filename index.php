@@ -16,7 +16,6 @@ $klein->respond(function ($request, $response, $service, $app) use ($klein) {
 });
 
 $klein->respond('/getData', function (\Klein\Request $request, \Klein\Response $response) {
-    //sleep(2);
     $settings = new Settings("config.yml");
 
     $weather = new Weather($settings->darkSkyAPIKey, $settings->lat, $settings->lon, $settings->location);

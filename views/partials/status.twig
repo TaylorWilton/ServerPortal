@@ -1,9 +1,11 @@
-<div class="block" id="stats">
+<div class="block">
   <h2>Server Status</h2>
-  <p v-if="loading"></p>
-  <ul class="list-unstyled" v-if="!loading">
-    <li v-for="stat in stats">
-      <span>${stat.name}: ${stat.value}</span>
-    </li>
-  </ul>
+  <div class="inner" id="stats">
+    <div class="loader" v-if="loading"></div>
+    <ul class="list-unstyled" v-if="!loading">
+      <li v-for="stat in stats">
+        <span>${stat.name}: ${stat.value}</span>
+      </li>
+    </ul>
+  </div>
 </div>

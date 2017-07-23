@@ -1,5 +1,7 @@
-<div class="block" id="hackernews">
+<div class="block">
   <h2>Top HackerNews Posts</h2>
+  <div class="inner" id="hackernews">
+  <div class="loader" v-if="loading"></div>
   <ol v-if="!loading">
     <li v-for="(post,key) in posts"
         v-if="key !== 'cachedAt'">
@@ -9,4 +11,5 @@
       <small class="comments-link"><a :href="'https://news.ycombinator.com/item?id=' + post.id">Comments</a></small>
     </li>
   </ol>
+  </div>
 </div>

@@ -3,6 +3,7 @@
 @import "partials/weather";
 @import "partials/anime";
 @import "partials/status";
+@import "partials/loading";
 
 * {
   margin: 0;
@@ -57,6 +58,7 @@ body {
   background: #F4F9FF;
   padding: 24px;
   margin-bottom: 24px;
+  transition: max-height .5s;
 
   h2 {
     padding-bottom: 6px;

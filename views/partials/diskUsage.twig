@@ -1,21 +1,22 @@
 <div class="block" id="disks">
   <h2>Disk Usage</h2>
-  <ul class="list-unstyled">
-      <li v-for="disk in disks">
-        <p class="usage-row">
+  <div class="loader" v-if="loading"></div>
+  <ul v-if="!loading" class="list-unstyled">
+    <li v-for="disk in disks">
+      <p class="usage-row">
         <span>${ disk.name }</span> <span class="usage">${ disk.value }
             GB of ${ disk.max }</span></p>
-        <meter
-                :value="disk.value"
-                :min="disk.min"
-                :max="disk.max"
-                :optimum="disk.max * 0.5"
-                :high="disk.max * 0.75"
-                :low="disk.max * 0.25"
-                :title="disk.value + 'GB'"
-        >
-          ${ disk.value / disk.max * 100 }%
-        </meter>
-      </li>
+      <meter
+              :value="disk.value"
+              :min="disk.min"
+              :max="disk.max"
+              :optimum="disk.max * 0.5"
+              :high="disk.max * 0.75"
+              :low="disk.max * 0.25"
+              :title="disk.value + 'GB'"
+      >
+        ${ disk.value / disk.max * 100 }%
+      </meter>
+    </li>
   </ul>
 </div>
