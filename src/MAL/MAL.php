@@ -22,7 +22,7 @@ class MAL
         $now = new DateTime();
         $diff = $now->diff($dateSaved);
 
-        if ($diff->days > 0 || $diff->h > 1 || $this->debug) {
+        if ($diff->days > 0 || $diff->h > 5) {
             $this->MALDataSource = new MALDataRemote($username);
             $this->data = $this->MALDataSource->getData();
             $this->cache();

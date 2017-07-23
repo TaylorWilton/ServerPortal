@@ -1,0 +1,7 @@
+latitude: <float|lat>
+longitude: <float|lon>
+weatherLocation: <string|location>
+DarkSkyApiKey: <string|apiKey>
+HackerNewsPostCount: <int|n>
+MALUsername: <string|username>
+Debug: <bool|b>

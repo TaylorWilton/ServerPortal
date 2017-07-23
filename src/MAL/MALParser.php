@@ -84,6 +84,7 @@ class MALParser
 
         $airing = array_map(function ($element) {
             $startDate = new \DateTime($element['series_start']);
+            $startDate->add(new \DateInterval('P1D'));
             $element['dayAiring'] = $startDate->format('l');
             return $element;
         }, $airing);

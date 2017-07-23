@@ -1,14 +1,17 @@
 <div class="block" id="weather">
-  <h2>Weather in  ${ forecast.location }</h2>
-  <div class="loader" v-if="loading"></div>
-  <p class="weather-brief">
-    <img class="weather-icon"
-         :src="'./assets/img/' + forecast.summaryNow.icon + '.svg'"
-         :alt="forecast.summaryNow.icon"
-    >
-    <span class="temp">${ forecast.summaryNow.temperature }°</span>
+  <div class="inner" id="weather">
+    <h2>Weather<span v-if="!loading"> in ${ forecast.location }</span></h2>
+    <div class="loader" v-if="loading"></div>
+    <div class="weather-content" v-if="!loading">
+      <p class="weather-brief">
+        <img class="weather-icon"
+             :src="'./assets/img/' + forecast.summaryNow.icon + '.svg'"
+             :alt="forecast.summaryNow.icon"
+        >
+        <span class="temp">${ forecast.summaryNow.temperature }°</span>
 
-  </p>
-  <p class="lead">${ forecast.summaryToday.description }</p>
-
+      </p>
+      <p class="lead">${ forecast.summaryToday.description }</p>
+    </div>
+  </div>
 </div>
