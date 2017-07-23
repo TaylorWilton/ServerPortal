@@ -1,7 +1,18 @@
+# Weather Data - uses Dark Sky API
+weatherLocation: <string|location>
 latitude: <float|lat>
 longitude: <float|lon>
-weatherLocation: <string|location>
 DarkSkyApiKey: <string|apiKey>
+
+# Hacker News
 HackerNewsPostCount: <int|n>
+
+# Anime
 MALUsername: <string|username>
+
+# List of RSS Feeds
+feeds:
+  - title: <string|title>,
+    link: <string|url>
+
 Debug: <bool|b>

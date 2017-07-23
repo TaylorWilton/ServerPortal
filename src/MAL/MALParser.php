@@ -21,7 +21,7 @@ class MALParser
      * @param bool $exact
      * @return array
      */
-    function findShow(string $name, bool $exact = true)
+    function findShow(string $name, bool $exact = true): array
     {
         if ($exact) {
             $key = array_search($name, array_column($this->data, 'series_title'));

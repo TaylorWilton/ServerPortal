@@ -41,24 +41,25 @@ var disks = new Vue({
     delimiters: ['${', '}']
 });
 
-var bbc = new Vue({
-    el: '#bbc-rss',
+var feeds = new Vue({
+    el: '#rss',
     data: {
-        feed: {},
+        feeds: {},
         loading: true
     },
     delimiters: ['${', '}']
 });
 
-sections = [hackernews, weather, anime, bbc];
+sections = [hackernews, weather, anime, feeds];
 
 fetch('getData').then(function (response) {
     return response.json();
 }).then(function (json) {
+    console.log(json);
     weather.forecast = json.forecast;
     hackernews.posts = json['hackernews'];
     anime.airingAnime = json.airingAnime.reverse();
-    bbc.feed = json['bbc'];
+    feeds.feeds = json['feeds'];
 
     sections.forEach(function (element) {
         element.loading = false;

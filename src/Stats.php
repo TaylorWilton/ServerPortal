@@ -64,12 +64,12 @@ class Stats
         ];
     }
 
-    public function getStats()
+    public function getStats(): array
     {
         return $this->stats;
     }
 
-    private function mock()
+    private function mock(): array
     {
         $this->disks = [
             0 => [
@@ -130,7 +130,7 @@ class Stats
         return $result;
     }
 
-    private function cache()
+    private function cache(): void
     {
         $data = [
             "disks" => $this->disks,

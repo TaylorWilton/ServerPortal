@@ -11,7 +11,7 @@ class Weather
     {
         $this->location = $location;
 
-        $cached = json_decode(file_get_contents("./data/weather.json"),true);
+        $cached = json_decode(file_get_contents("./data/weather.json"), true);
         $dateSaved = new DateTime($cached['cachedAt']['date']);
         $now = new DateTime();
         $diff = $now->diff($dateSaved);
@@ -31,13 +31,13 @@ class Weather
     }
 
 
-    private function cache()
+    private function cache(): void
     {
         $this->parsedData["cachedAt"] = new DateTime();
         file_put_contents("./data/weather.json", json_encode($this->parsedData));
     }
 
-    private function parseWeatherData()
+    private function parseWeatherData(): array
     {
         $weatherForecast = $this->weatherForecast;
         $summaryNow = [

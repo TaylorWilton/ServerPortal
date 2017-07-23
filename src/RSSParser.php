@@ -17,7 +17,7 @@ class RSSParser
         $this->data = $data;
     }
 
-    public function getFeed()
+    public function getFeed(): array
     {
         $results = [
             "title" => $this->feedTitle,

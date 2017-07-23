@@ -7,42 +7,58 @@ use MAL\MALParser;
 
 $klein = new Klein\Klein;
 
-$klein->respond(function ($request, $response, $service, $app) use ($klein) {
+$klein->respond(function (
+    \Klein\Request $request,
+    \Klein\Response $response,
+    \Klein\ServiceProvider $service,
+    \Klein\App $app
+) use ($klein) {
 
     $app->register('twig', function () {
         $loader = new Twig_Loader_Filesystem('views');
         return new Twig_Environment($loader);
     });
+    $app->register('settings', function () {
+        return new Settings("config.yml");
+
+    });
 });
 
-$klein->respond('/getStats', function ($request, \Klein\Response $response) {
+$klein->respond('/getStats', function (\Klein\Request $request, \Klein\Response $response) {
     $stats = new Stats();
     $response->json(["stats" => $stats->getStats(), "disks" => $stats->disks,]);
 });
 
-$klein->respond('/getData', function (\Klein\Request $request, \Klein\Response $response) {
-    $settings = new Settings("config.yml");
-    $weather = new Weather($settings->darkSkyAPIKey, $settings->lat, $settings->lon, $settings->location);
-    $hackerNews = new HackerNews(10);
-    $malData = new MAL("DrDeakz");
-    $malParser = new MALParser($malData->getDataSource());
+$klein->respond('/getData',
+    function (\Klein\Request $request, \Klein\Response $response, \Klein\ServiceProvider $service, \Klein\App $app) {
+        // get settings config from $app
+        $settings = $app->settings;
 
-    $bbc = new RSSParser("http://feeds.bbci.co.uk/news/technology/rss.xml", "BBC News - Technology");
+        $weather = new Weather($settings->darkSkyAPIKey, $settings->lat, $settings->lon, $settings->location);
+        $hackerNews = new HackerNews(10);
+        $malData = new MAL($settings->MALUsername);
+        $malParser = new MALParser($malData->getDataSource());
 
-    $dashboardData = [
-        "forecast" => $weather->getForecast(),
-        "hackernews" => $hackerNews->getTopPosts(),
-        "airingAnime" => $malParser->currentlyAiring(),
-        "bbc" => $bbc->getFeed()
-    ];
+        $feeds = array_map(function ($feed) {
+            $rss = new RSSParser($feed['link'], $feed['title']);
+            return $rss->getFeed();
+        }, $settings->feeds);
 
-    $response->json($dashboardData);
-});
+        $dashboardData = [
+            "forecast" => $weather->getForecast(),
+            "hackernews" => $hackerNews->getTopPosts(),
+            "airingAnime" => $malParser->currentlyAiring(),
+            "feeds" => $feeds
+        ];
+
+        $response->json($dashboardData);
+    });
 
 // HOME PAGE
-$klein->respond('/', function ($request, $response, $service, $app) {
-    // render the dashboard, but let vueJS fill in the data
-    echo $app->twig->render('dashboard.twig', []);
-});
+$klein->respond('/',
+    function (\Klein\Request $request, \Klein\Response $response, \Klein\ServiceProvider $service, $app) {
+        // render the dashboard, but let vueJS fill in the data
+        echo $app->twig->render('dashboard.twig', []);
+    });
 
 $klein->dispatch();

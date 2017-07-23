@@ -1,10 +1,17 @@
-<div class="block rss" id="{{ id }}">
-  <h2 v-if="!loading">${ feed.title }</h2>
-  <h2 v-if="loading">Loading RSS Feed</h2>
-  <div class="loader" v-if="loading"></div>
-  <ol v-if="!loading">
-    <li v-for="item in feed.items">
-      <a :href="item.link">${ item.title }</a>
-    </li>
-  </ol>
+<div class="rss" id="rss">
+  <div class="block" v-if="loading">
+    <h2>Loading RSS Feeds</h2>
+    <div class="loader"></div>
+  </div>
+  <div class="grid">
+    <div class="block" v-for="feed in feeds">
+      <h2 v-if="!loading">${ feed.title }</h2>
+      <div class="loader" v-if="loading"></div>
+      <ol v-if="!loading">
+        <li v-for="item in feed.items">
+          <a :href="item.link">${ item.title }</a>
+        </li>
+      </ol>
+    </div>
+  </div>
 </div>

@@ -50,7 +50,7 @@ class HackerNews
         return $topTenHNPosts;
     }
 
-    private function cache()
+    private function cache(): void
     {
         $this->topPosts["cachedAt"] = new DateTime();
         file_put_contents("./data/hackernews.json", json_encode($this->topPosts));

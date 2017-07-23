@@ -12,6 +12,7 @@ class Settings
     public $darkSkyAPIKey;
     public $MALUsername;
     public $debug;
+    public $feeds;
 
     public function __construct(string $filename = "config.yml")
     {
@@ -29,5 +30,6 @@ class Settings
         $this->darkSkyAPIKey = $config['DarkSkyApiKey'];
         $this->debug = $config['Debug'];
         $this->MALUsername = $config['MALUsername'];
+        $this->feeds = $config['feeds'];
     }
 }

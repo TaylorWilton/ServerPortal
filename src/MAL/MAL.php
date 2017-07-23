@@ -46,7 +46,7 @@ class MAL
     }
 
 
-    private function cache()
+    private function cache(): void
     {
         $this->data["cachedAt"] = new DateTime();
         file_put_contents("./data/{$this->username}_mal.json", json_encode($this->data));
